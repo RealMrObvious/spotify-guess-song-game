@@ -1,0 +1,85 @@
+/* Reset some default styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 15px;
+    font-weight: bold;
+  }
+  
+  .title-header {
+    margin-top: 20px;
+  }
+  
+  .message-search {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .artists-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .artist-container {
+    width: 100%;
+    margin-bottom: 20px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: #fff;
+  }
+  
+  .artist-img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .artist-info {
+    padding: 15px;
+  }
+  
+  .artist-name {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  .button-view-artist {
+    background-color: #333;
+    color: #fff;
+    padding: 8px 15px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-view-artist:hover {
+    background-color: #555;
+  }
+  

@@ -1,0 +1,27 @@
+doctype html
+html(lang="en")
+  head 
+    meta(charset="utf-8")
+    title My Spotify Profile
+        script(src="/app.js", type="module")
+  body
+    h1 Search for a user
+    form(action='/artists' method='POST')
+        input(id='search' name = 'search')
+        input(type='submit' value='search')
+    section#profile
+      p#test test 
+      //- h2 Logged in as 
+      //-   span#displayName
+      //- span#avatar
+      ul 
+        li User ID:
+          span#id
+        li Email:
+          span#email
+        li Spotify URI:
+          a#uri(href="#")
+        li Link:
+          a#url(href="#")
+        li Profile Image:
+          span#imgUrl
