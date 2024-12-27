@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Spotify Playlists</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      padding: 20px;
+    }
+    h1 {
+      color: #1db954; /* Spotify green */
+    }
+    .playlist {
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .playlist img {
+      max-width: 100px;
+      border-radius: 5px;
+    }
+    .playlist-details {
+      display: inline-block;
+      vertical-align: top;
+      margin-left: 15px;
+    }
+    .playlist-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #1db954;
+    }
+    .playlist-description {
+      font-size: 14px;
+      color: #666;
+    }
+    .track-count {
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your Spotify Playlists</h1>
+
+  <!-- Check if playlists are available -->
+  {% if playlists %}
+    <div id="playlists">
+      {% for playlist in playlists %}
+        <div class="playlist">
+          <div class="playlist-info">
+            <img src="{{ playlist.images[0].url }}" alt="Playlist image">
+            <div class="playlist-details">
+              <div class="playlist-name">{{ playlist.name }}</div>
+              <div class="playlist-description">{{ playlist.description or 'No description available' }}</div>
+              <div class="track-count">{{ playlist.tracks.total }} tracks</div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>You have no playlists to show.</p>
+  {% endif %}
+
+</body>
+</html>
