@@ -57,15 +57,96 @@ app.use(express.static(__dirname + '/public'));
 app.engine('html', consolidate.nunjucks);
 
 app.get('/', function (req, res) {
-  res.render('index.html', { user: req.user });
+  const user = req.user;
+
+  if (user && user.accessToken) {
+    // Define the API URL
+    const apiUrl = 'https://api.spotify.com/v1/me/playlists';
+
+    // Make a GET request to Spotify API using the access token
+    fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${user.accessToken}`, // Include the token in the Authorization header
+        'Content-Type': 'application/json' // Optional, depending on the API requirements
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+
+        res.render('index.html', { user: req.user, playlists:data.items })
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        res.status(500).send('Error fetching data from Spotify');
+      });
+  } else {
+    res.render('index.html', { user: req.user })
+  }
+  
 });
+
+app.get('/play/:playlistId', ensureAuthenticated, function (req, res) {
+
+  const user = req.user;
+  const playlistId = req.params.playlistId
+
+  if (user && user.accessToken && playlistId) {
+    // Define the API URL
+    const apiUrl = `https://api.spotify.com/v1/playlists/${playlistId}`;
+
+    // Make a GET request to Spotify API using the access token
+    fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${user.accessToken}`, // Include the token in the Authorization header
+        'Content-Type': 'application/json' // Optional, depending on the API requirements
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+
+        let tracks = data.tracks.items
+        let track = tracks[Math.floor(Math.random() * tracks.length)].track;
+
+        console.log(track.id,track.name)
+
+        res.render('play.html', { songId:track.id });
+
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        res.status(500).send('Error fetching data from Spotify');
+      });
+  } else {
+    res.status(401).send('Unauthorized: No access token found');
+  }
+});
+
+
+
 
 app.get('/account', ensureAuthenticated, function (req, res) {
   res.render('account.html', { user: req.user });
 });
 
+app.get('/tracks', ensureAuthenticated, function (req, res) {
+  res.render('track.html', { user: req.user });
+});
+
+
 app.get('/track', ensureAuthenticated, function (req, res) {
-  console.log(req.params, req.user);
+  // console.log(req.params, req.user);
 
   const user = req.user;
 
@@ -88,8 +169,46 @@ app.get('/track', ensureAuthenticated, function (req, res) {
         return response.json();
       })
       .then(data => {
-        console.log(data);
-        res.render('tracks.html', { playlists: data.items }); // Render track page with playlists
+        // console.log(data);
+        playlists = []
+        playlists.push(data.items[0])
+
+
+        tracks = 'https://api.spotify.com/v1/tracks/5CVMb0H4Dn7v95KHf9znVI'
+
+
+        fetch(tracks, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${user.accessToken}`, // Include the token in the Authorization header
+            'Content-Type': 'application/json' // Optional, depending on the API requirements
+          }
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data2 => {
+
+            // console.log(data2)
+
+            song = data2.id
+
+            // console.log(playlists)
+            console.log(song)
+            res.render('track.html', { playlists, song }); // Render track page with playlists
+
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            res.status(500).send('Error fetching data from Spotify');
+          });
+
+
+
+
       })
       .catch(error => {
         console.error('Error:', error);
